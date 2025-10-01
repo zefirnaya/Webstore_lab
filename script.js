@@ -133,6 +133,103 @@ orderForm.addEventListener('submit', function(e) {
     closeModal();
 });
 
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    const existingItem = cartItems.find(item => item.id === productId);
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cartItems.push({
+            ...product,
+            quantity: 1
+        });
+    }
+    
+    updateCart();
+    showAddToCartAnimation(productId);
+}
+
+function removeFromCart(productId) {
+    cartItems = cartItems.filter(item => item.id !== productId);
+    updateCart();
+}
+
+function increaseQuantity(productId) {
+    const item = cartItems.find(item => item.id === productId);
+    if (item) {
+        item.quantity += 1;
+        updateCart();
+    }
+}
+
+function decreaseQuantity(productId) {
+    const item = cartItems.find(item => item.id === productId);
+    if (item) {
+        if (item.quantity > 1) {
+            item.quantity -= 1;
+        } else {
+            removeFromCart(productId);
+            return;
+        }
+        updateCart();
+    }
+}
+
+function updateCart() {
+    renderCart();
+    updateCartTotal();
+}
+
+function showAddToCartAnimation(productId) {
+    const button = document.querySelector(`.add-to-cart[onclick="addToCart(${productId})"]`);
+    if (button) {
+        const originalText = button.textContent;
+        button.textContent = 'Добавлено!';
+        button.style.background = '#27ae60';
+        
+        setTimeout(() => {
+            button.textContent = originalText;
+            button.style.background = '';
+        }, 1000);
+    }
+}
+
+function renderCart() {
+    cartItemsContainer.innerHTML = '';
+    
+    if (cartItems.length === 0) {
+        cartItemsContainer.innerHTML = '<div class="empty-cart">Корзина пуста</div>';
+        checkoutBtn.disabled = true;
+        checkoutBtn.style.background = '#95a5a6';
+        return;
+    }
+    
+    checkoutBtn.disabled = false;
+    checkoutBtn.style.background = '#27ae60';
+    
+    cartItems.forEach(item => {
+        const cartItemElement = document.createElement('div');
+        cartItemElement.className = 'cart-item';
+        cartItemElement.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+            <div class="cart-item-details">
+                <div class="cart-item-title">${item.name}</div>
+                <div class="cart-item-price">${item.price.toLocaleString()} руб.</div>
+                <div class="cart-item-controls">
+                    <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                    <span class="quantity-display">${item.quantity}</span>
+                    <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Удалить</button>
+                </div>
+            </div>
+        `;
+        cartItemsContainer.appendChild(cartItemElement);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     renderProducts();
     

@@ -107,6 +107,10 @@ body {
     font-size: 1.1rem;
 }
 
+.checkout-btn:hover {
+    background: #a2dc76;
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -172,7 +176,6 @@ body {
 
 .submit-order {
     background: #a2dc76;
-;
     color: white;
 }
 
@@ -330,7 +333,7 @@ body {
 }
 
 .remove-btn {
-    background: #e74c3c;
+    background: #bc76d1;
     color: white;
     border: none;
     padding: 0.25rem 0.5rem;
@@ -340,7 +343,7 @@ body {
 }
 
 .remove-btn:hover {
-    background: #c0392b;
+    background: #e6aef8;
 }
 
 .empty-cart {
@@ -349,7 +352,6 @@ body {
     color: #7f8c8d;
 }
 
-/* Cart Sidebar Responsive */
 @media (max-width: 480px) {
     .cart-sidebar {
         width: 100%;
