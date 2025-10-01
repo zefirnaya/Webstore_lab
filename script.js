@@ -178,53 +178,6 @@ function updateCart() {
     updateCartTotal();
 }
 
-function showAddToCartAnimation(productId) {
-    const button = document.querySelector(`.add-to-cart[onclick="addToCart(${productId})"]`);
-    if (button) {
-        const originalText = button.textContent;
-        button.textContent = 'Добавлено!';
-        button.style.background = '#27ae60';
-        
-        setTimeout(() => {
-            button.textContent = originalText;
-            button.style.background = '';
-        }, 1000);
-    }
-}
-
-function renderCart() {
-    cartItemsContainer.innerHTML = '';
-    
-    if (cartItems.length === 0) {
-        cartItemsContainer.innerHTML = '<div class="empty-cart">Корзина пуста</div>';
-        checkoutBtn.disabled = true;
-        checkoutBtn.style.background = '#95a5a6';
-        return;
-    }
-    
-    checkoutBtn.disabled = false;
-    checkoutBtn.style.background = '#27ae60';
-    
-    cartItems.forEach(item => {
-        const cartItemElement = document.createElement('div');
-        cartItemElement.className = 'cart-item';
-        cartItemElement.innerHTML = `
-            <img src="${item.image}" alt="${item.name}" class="cart-item-image">
-            <div class="cart-item-details">
-                <div class="cart-item-title">${item.name}</div>
-                <div class="cart-item-price">${item.price.toLocaleString()} руб.</div>
-                <div class="cart-item-controls">
-                    <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
-                    <span class="quantity-display">${item.quantity}</span>
-                    <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
-                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Удалить</button>
-                </div>
-            </div>
-        `;
-        cartItemsContainer.appendChild(cartItemElement);
-    });
-}
-
 function saveCartToLocalStorage() {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
 }
@@ -348,4 +301,12 @@ document.addEventListener('DOMContentLoaded', function() {
             closeModal();
         }
     });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeCartSidebar();
+            closeModal();
+        }
+    });
+
 });
