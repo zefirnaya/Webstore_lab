@@ -69,12 +69,86 @@ function renderProducts() {
     });
 }
 
+function openCart() {
+    cartSidebar.classList.add('active');
+    renderCart();
+}
+
+function closeCartSidebar() {
+    cartSidebar.classList.remove('active');
+}
+
+function openModal() {
+    modalOverlay.classList.add('active');
+}
+
+function closeModal() {
+    modalOverlay.classList.remove('active');
+}
+
+function renderCart() {
+    cartItemsContainer.innerHTML = '';
+    
+    if (cartItems.length === 0) {
+        cartItemsContainer.innerHTML = '<div class="empty-cart">Корзина пуста</div>';
+        return;
+    }
+    
+    cartItems.forEach(item => {
+        const cartItemElement = document.createElement('div');
+        cartItemElement.className = 'cart-item';
+        cartItemElement.innerHTML = `
+            <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+            <div class="cart-item-details">
+                <div class="cart-item-title">${item.name}</div>
+                <div class="cart-item-price">${item.price.toLocaleString()} руб.</div>
+                <div class="cart-item-controls">
+                    <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                    <span class="quantity-display">${item.quantity}</span>
+                    <button class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Удалить</button>
+                </div>
+            </div>
+        `;
+        cartItemsContainer.appendChild(cartItemElement);
+    });
+}
+
+function updateCartTotal() {
+    const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const totalCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    
+    cartTotal.textContent = total.toLocaleString();
+    cartCount.textContent = totalCount.toLocaleString();
+    sidebarCartTotal.textContent = total.toLocaleString();
+}
+
+closeCart.addEventListener('click', closeCartSidebar);
+checkoutBtn.addEventListener('click', openModal);
+cancelOrder.addEventListener('click', closeModal);
+
+orderForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert('Заказ создан!');
+    closeModal();
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     renderProducts();
     
     const cartInfo = document.querySelector('.cart-info');
     cartInfo.style.cursor = 'pointer';
-    cartInfo.addEventListener('click', () => {
-        cartSidebar.classList.add('active');
+    cartInfo.addEventListener('click', openCart);
+    
+    document.addEventListener('click', (e) => {
+        if (e.target === cartSidebar) {
+            closeCartSidebar();
+        }
+    });
+    
+    modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+            closeModal();
+        }
     });
 });
