@@ -230,8 +230,70 @@ function renderCart() {
     });
 }
 
+function saveCartToLocalStorage() {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+}
+
+function loadCartFromLocalStorage() {
+    const savedCart = localStorage.getItem('cartItems');
+    if (savedCart) {
+        cartItems = JSON.parse(savedCart);
+    }
+}
+
+function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+    
+    const existingItem = cartItems.find(item => item.id === productId);
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cartItems.push({
+            ...product,
+            quantity: 1
+        });
+    }
+    
+    updateCart();
+    saveCartToLocalStorage();
+    showAddToCartAnimation(productId);
+}
+
+function removeFromCart(productId) {
+    cartItems = cartItems.filter(item => item.id !== productId);
+    updateCart();
+    saveCartToLocalStorage();
+}
+
+function increaseQuantity(productId) {
+    const item = cartItems.find(item => item.id === productId);
+    if (item) {
+        item.quantity += 1;
+        updateCart();
+        saveCartToLocalStorage();
+    }
+}
+
+function decreaseQuantity(productId) {
+    const item = cartItems.find(item => item.id === productId);
+    if (item) {
+        if (item.quantity > 1) {
+            item.quantity -= 1;
+        } else {
+            removeFromCart(productId);
+            return;
+        }
+        updateCart();
+        saveCartToLocalStorage();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    loadCartFromLocalStorage();
     renderProducts();
+    updateCartTotal();
     
     const cartInfo = document.querySelector('.cart-info');
     cartInfo.style.cursor = 'pointer';
