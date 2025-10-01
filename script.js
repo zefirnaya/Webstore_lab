@@ -15,7 +15,7 @@ const products = [
     },
     {
         id: 3,
-        name: "DIMOO Earth Day Figure",
+        name: "GLEBOO Earth Day Figure",
         price: 3600,
         image: "https://prod-eurasian-res.popmart.com/default/20250415_155736_903426____1_____1200x1200.jpg"
     },
@@ -127,11 +127,6 @@ closeCart.addEventListener('click', closeCartSidebar);
 checkoutBtn.addEventListener('click', openModal);
 cancelOrder.addEventListener('click', closeModal);
 
-orderForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Заказ создан!');
-    closeModal();
-});
 
 function addToCart(productId) {
     const product = products.find(p => p.id === productId);
@@ -290,6 +285,49 @@ function decreaseQuantity(productId) {
     }
 }
 
+function submitOrder(orderData) {
+    console.log('Данные заказа:', orderData);
+    console.log('Товары в заказе:', cartItems);
+    
+    alert('Заказ создан!');
+    
+    cartItems = [];
+    updateCart();
+    saveCartToLocalStorage();
+    
+    closeModal();
+    
+    closeCartSidebar();
+}
+
+orderForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(orderForm);
+    const orderData = {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        address: formData.get('address'),
+        phone: formData.get('phone'),
+        orderDate: new Date().toISOString()
+    };
+    
+    submitOrder(orderData);
+});
+
+document.getElementById('phone').addEventListener('input', function(e) {
+    const phone = e.target.value.replace(/\D/g, '');
+    e.target.value = phone;
+});
+
+checkoutBtn.addEventListener('click', function() {
+    if (cartItems.length === 0) {
+        alert('Корзина пуста!');
+        return;
+    }
+    openModal();
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     loadCartFromLocalStorage();
     renderProducts();
@@ -304,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
             closeCartSidebar();
         }
     });
-    
+
     modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) {
             closeModal();
