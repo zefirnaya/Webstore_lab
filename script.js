@@ -9,7 +9,7 @@ const products = [
     },
     {
         id: 2,
-        name: "DIMOO By Your Side Series Figures",
+        name: "DIMOO By Your Side Series",
         price: 1700,
         image: "https://prod-eurasian-res.popmart.com/default/20240612_102058_963725____1_____1200x1200.jpg"
     },
@@ -33,7 +33,7 @@ const products = [
     },
     {
         id: 6,
-        name: "CHAKA Light Sprite Series Figures",
+        name: "CHAKA Light Sprite Series",
         price: 1400,
         image: "https://prod-eurasian-res.popmart.com/default/20240708_154454_015088____1_____1200x1200.jpg"
     }
