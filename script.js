@@ -296,6 +296,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    document.addEventListener('click', (e) => {
+    if (cartSidebar.classList.contains('active')) {
+        // Проверяем, был ли клик внутри корзины или на кнопке открытия корзины
+        const isClickInsideCart = cartSidebar.contains(e.target);
+        const isCartInfoClick = e.target.closest('.cart-info');
+        
+        // Закрываем корзину только если клик был снаружи И не на кнопке открытия
+        if (!isClickInsideCart && !isCartInfoClick) {
+            closeCartSidebar();
+        }
+    }
+});
+
     modalOverlay.addEventListener('click', (e) => {
         if (e.target === modalOverlay) {
             closeModal();
