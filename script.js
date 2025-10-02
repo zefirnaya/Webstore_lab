@@ -294,8 +294,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (cartSidebar.classList.contains('active')) {
         const isClickInsideCart = cartSidebar.contains(e.target);
         const isCartInfoClick = e.target.closest('.cart-info');
+        const isCartButton = e.target.closest('.quantity-btn') || 
+                           e.target.closest('.remove-btn') ||
+                           e.target.closest('.checkout-btn');
         
-        if (!isClickInsideCart && !isCartInfoClick) {
+        if (!isClickInsideCart && !isCartInfoClick && !isCartButton) {
             closeCartSidebar();
         }
     }
