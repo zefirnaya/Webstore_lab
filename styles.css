@@ -31,13 +31,28 @@ body {
     align-items: center;
 }
 
-.cart-info {
-    font-size: 1.1rem;
+.cart-info-wrapper {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
 }
 
+.cart-info-wrapper:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cart-info {
+    margin: 0;
+    padding: 0;
+    font-size: 1.2rem;
+}
 
 .main {
     padding: 2rem 0;
+    font-size: 1.3rem;
 }
 
 .products h2 {
